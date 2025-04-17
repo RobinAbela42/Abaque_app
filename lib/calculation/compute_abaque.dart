@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 double computeLength({section, intensity, voltage = 230, resistance = 0.021}) {
   return (voltage * section) / intensity * resistance;
 }
