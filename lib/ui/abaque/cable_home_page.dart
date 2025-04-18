@@ -1,3 +1,4 @@
+import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,32 +16,80 @@ class _CableHomePageState extends State<CableHomePage> {
   final intensityController = TextEditingController();
   final sectionController = TextEditingController();
 
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  // }
+
   @override
   void dispose() {
     voltageController.dispose();
+    lengthController.dispose();
+    intensityController.dispose();
+    sectionController.dispose();
     super.dispose();
   }
 
   num stringToNum({str}) {
     num res = 0;
-    try {
-      res = num.parse(str);
-    } on Exception catch (_) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Doit contenir des chiffres uniquement.'),
-          );
-        },
-      );
+    if (str != null) {
+      try {
+        res = num.parse(str);
+      } on Exception catch (_) {
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return AlertDialog(
+        //       title: Text('Doit contenir des chiffres uniquement.'),
+        //     );
+        //   },
+        // );
+        return -1;
+      }
+      return res;
     }
-    return res;
+    return -1;
+  }
+
+  bool isEverythingFilled(controller) {
+    if ((voltageController.text.isNotEmpty ||
+            voltageController == controller) &&
+        (lengthController.text.isNotEmpty || lengthController == controller) &&
+        (intensityController.text.isNotEmpty ||
+            intensityController == controller) &&
+        (sectionController.text.isNotEmpty ||
+            sectionController == controller)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+
+    void fillEverything() {
+      lengthController.text =
+          computeLength(
+            section: appState.section,
+            voltage: appState.voltage,
+            intensity: appState.intensity,
+          ).toString();
+      voltageController.text =
+          computeVoltage(
+            section: appState.section,
+            length: appState.length,
+            intensity: appState.intensity,
+          ).toString();
+      voltageController.text =
+          computeVoltage(
+            section: appState.section,
+            length: appState.length,
+            intensity: appState.intensity,
+          ).toString();
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('App_name cable')),
@@ -51,9 +100,16 @@ class _CableHomePageState extends State<CableHomePage> {
             keyboardType: TextInputType.number,
             maxLength: 4,
             controller: voltageController,
-
-            onSubmitted: (value) {
+            onChanged: (value) {
               appState.voltage = stringToNum(str: value);
+              if (isEverythingFilled(voltageController)) {
+                lengthController.text =
+                    computeLength(
+                      section: appState.section,
+                      voltage: appState.voltage,
+                      intensity: appState.intensity,
+                    ).toString();
+              }
             },
           ),
           Text('Length : '),
@@ -62,8 +118,16 @@ class _CableHomePageState extends State<CableHomePage> {
             maxLength: 4,
             controller: lengthController,
 
-            onSubmitted: (value) {
+            onChanged: (value) {
               appState.length = stringToNum(str: value);
+              if (isEverythingFilled(lengthController)) {
+                voltageController.text =
+                    computeVoltage(
+                      section: appState.section,
+                      length: appState.length,
+                      intensity: appState.intensity,
+                    ).toString();
+              }
             },
           ),
           Text('Intensity : '),
@@ -71,7 +135,17 @@ class _CableHomePageState extends State<CableHomePage> {
             keyboardType: TextInputType.number,
             maxLength: 4,
             controller: intensityController,
-
+              
+            onSubmitted: (value) {
+              appState.intensity = stringToNum(str: value);
+            },
+          ),
+          Text('Power : '),
+          TextField(
+            keyboardType: TextInputType.number,
+            maxLength: 4,
+            controller: intensityController,
+            decoration: InputDecoration(),
             onSubmitted: (value) {
               appState.intensity = stringToNum(str: value);
             },

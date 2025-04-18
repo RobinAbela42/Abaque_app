@@ -27,25 +27,61 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   // Length of the section wanted, in meters
-  num length = 0;
-  // num get length {
-  //   return _length;
-  // }
-  // String get strLength {
-  //   return _length.toString();
-  // }
-  // set length(value) {
-  //   _length = value;
-  // }
+  num _length = 0;
+  num get length {
+    return _length;
+  }
+
+  set length(value) {
+    if (value == null || null != num.tryParse(value.toString())) {
+      _length = value;
+    }
+  }
 
   // Diameter of the section wanted, in Squares Milimeters
-  num section = 0;
+  num _section = 0;
+
+  num get section {
+    return _section;
+  }
+
+  set section(num value) {
+    
+    _section = ((value*10).round())/10;
+  }
+
   // Electrical outlet's Voltage, in Volt
-  num voltage= 230;
+  num _voltage = 230;
+
+  num get voltage {
+    return _voltage;
+  }
+
+  set voltage(num value) {
+    _voltage = value;
+  }
+
   // Intensity of the installation, in Amps
-  num intensity = 0;
+  num _intensity = 0;
+
+  num get intensity {
+    return _intensity;
+  }
+
+  set intensity(num value) {
+    _intensity = value;
+  }
+
   // Used material's resistance, copper by default since it's the most used, in Ohms
-  num resistance = 0.021;
+  num _resistance = 0.021;
+
+  num get resistance {
+    return _resistance;
+  }
+
+  set resistance(num value) {
+    _resistance = value;
+  }
 }
 
 class HomePage extends StatefulWidget {
