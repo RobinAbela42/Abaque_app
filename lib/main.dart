@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,62 +28,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  // Length of the section wanted, in meters
-  num _length = 0;
-  num get length {
-    return _length;
-  }
 
-  set length(value) {
-    if (value == null || null != num.tryParse(value.toString())) {
-      _length = value;
-    }
-  }
 
-  // Diameter of the section wanted, in Squares Milimeters
-  num _section = 0;
-
-  num get section {
-    return _section;
-  }
-
-  set section(num value) {
-    
-    _section = ((value*10).round())/10;
-  }
-
-  // Electrical outlet's Voltage, in Volt
-  num _voltage = 230;
-
-  num get voltage {
-    return _voltage;
-  }
-
-  set voltage(num value) {
-    _voltage = value;
-  }
-
-  // Intensity of the installation, in Amps
-  num _intensity = 0;
-
-  num get intensity {
-    return _intensity;
-  }
-
-  set intensity(num value) {
-    _intensity = value;
-  }
-
-  // Used material's resistance, copper by default since it's the most used, in Ohms
-  num _resistance = 0.021;
-
-  num get resistance {
-    return _resistance;
-  }
-
-  set resistance(num value) {
-    _resistance = value;
-  }
 }
 
 class HomePage extends StatefulWidget {

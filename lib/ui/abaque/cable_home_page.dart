@@ -1,5 +1,6 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/main.dart';
+import 'package:abaque_app/ui/abaque/length_query_mono.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class _CableHomePageState extends State<CableHomePage> {
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final sectionController = TextEditingController();
+  final powerController = TextEditingController();
 
   // @override
   // void initState() {
@@ -28,6 +30,7 @@ class _CableHomePageState extends State<CableHomePage> {
     lengthController.dispose();
     intensityController.dispose();
     sectionController.dispose();
+    powerController.dispose();
     super.dispose();
   }
 
@@ -45,11 +48,11 @@ class _CableHomePageState extends State<CableHomePage> {
         //     );
         //   },
         // );
-        return -1;
+        return 0;
       }
       return res;
     }
-    return -1;
+    return 0;
   }
 
   bool isEverythingFilled(controller) {
@@ -68,117 +71,61 @@ class _CableHomePageState extends State<CableHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
     void fillEverything() {
       lengthController.text =
           computeLength(
-            section: appState.section,
-            voltage: appState.voltage,
-            intensity: appState.intensity,
+            section: section,
+            voltage: voltage,
+            intensity: intensity,
           ).toString();
       voltageController.text =
           computeVoltage(
-            section: appState.section,
-            length: appState.length,
-            intensity: appState.intensity,
+            section: section,
+            length: length,
+            intensity: intensity,
           ).toString();
       voltageController.text =
           computeVoltage(
-            section: appState.section,
-            length: appState.length,
-            intensity: appState.intensity,
+            section: section,
+            length: length,
+            intensity: intensity,
           ).toString();
     }
 
+    void updateFormValue(controller) {
+      if (controller == powerController) {
+        intensityController.text = intensity.toString();
+        voltageController.text = voltage.toString();
+      }
+      if (controller == intensityController) {
+        powerController.text = power.toString();
+        voltageController.text = voltage.toString();
+      }
+      if (controller == voltageController) {
+        powerController.text = power.toString();
+        intensityController.text = intensity.toString();
+      }
+    }
+
     return Scaffold(
-      appBar: AppBar(title: const Text('App_name cable')),
-      body: Column(
-        children: [
-          Text('Voltage : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            controller: voltageController,
-            onChanged: (value) {
-              appState.voltage = stringToNum(str: value);
-              if (isEverythingFilled(voltageController)) {
-                lengthController.text =
-                    computeLength(
-                      section: appState.section,
-                      voltage: appState.voltage,
-                      intensity: appState.intensity,
-                    ).toString();
-              }
-            },
-          ),
-          Text('Length : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            controller: lengthController,
-
-            onChanged: (value) {
-              appState.length = stringToNum(str: value);
-              if (isEverythingFilled(lengthController)) {
-                voltageController.text =
-                    computeVoltage(
-                      section: appState.section,
-                      length: appState.length,
-                      intensity: appState.intensity,
-                    ).toString();
-              }
-            },
-          ),
-          Text('Intensity : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            controller: intensityController,
-              
-            onSubmitted: (value) {
-              appState.intensity = stringToNum(str: value);
-            },
-          ),
-          Text('Power : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            controller: intensityController,
-            decoration: InputDecoration(),
-            onSubmitted: (value) {
-              appState.intensity = stringToNum(str: value);
-            },
-          ),
-          Text('Section : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            controller: sectionController,
-
-            onSubmitted: (value) {
-              appState.section = stringToNum(str: value);
-            },
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Text('Debug'),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(
-                  '\nvoltage : ${appState.voltage.toString()}'
-                  '\nlength : ${appState.length.toString()}'
-                  '\nsection : ${appState.section.toString()}'
-                  '\nintensity : ${appState.intensity.toString()}',
-                ),
-              );
-            },
-          );
-        },
+      appBar: AppBar(title: Text('Abaque')),
+      body: Center(
+        child: Column(
+          children: [
+            Text('Longueur du câble :'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => LengthQueryMono(),
+                  ),
+                );
+              },
+              child: Text('Longueur'),
+            ),
+          ],
+        ),
       ),
     );
   }
