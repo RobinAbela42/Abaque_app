@@ -1,7 +1,6 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class LengthQueryMono extends CableHomePage {
   const LengthQueryMono({super.key});
@@ -14,7 +13,6 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
   final voltageController = TextEditingController(text: "230");
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
-  final sectionController = TextEditingController();
   final powerController = TextEditingController();
 
   @override
@@ -22,7 +20,6 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
     voltageController.dispose();
     lengthController.dispose();
     intensityController.dispose();
-    sectionController.dispose();
     powerController.dispose();
     super.dispose();
   }
@@ -32,8 +29,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
             voltageController == controller) &&
         ((intensityController.text.isNotEmpty && intensity != 0) ||
             intensityController == controller) &&
-        ((sectionController.text.isNotEmpty && section != 0) ||
-            sectionController == controller));
+        section != 0);
   }
 
   @override
@@ -79,29 +75,23 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
             },
           ),
           Text('Section : '),
-          DropdownButton<num>(items: acceptableSections.map<DropdownMenuItem<num>>((num value) {
-            String res = value.toString();
-            if(value == 0){
-              res="Choisir une section";
-            }
-            return DropdownMenuItem<num>(value:value, child: Text(res));
-          }).toList()
-          ,
-          value: section,
-          onChanged: (value) {},
-          ),
-
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: sectionController,
-
-            onChanged: (value) {
-              section = stringToNum(str: value);
-
+          DropdownButton<num>(
+            items:
+                acceptableSections.map<DropdownMenuItem<num>>((num value) {
+                  String res = value.toString();
+                  if (value == 0) {
+                    res = "Choisir une section en";
+                  }
+                  return DropdownMenuItem<num>(value: value, child: Text("$res mm2"));
+                }).toList(),
+            value: section,
+            onChanged: (num? value) {
+              setState(() {
+                section = value!;
+              });
               fillLength();
             },
           ),
-
           Text('Intensity : '),
           TextField(
             keyboardType: TextInputType.number,

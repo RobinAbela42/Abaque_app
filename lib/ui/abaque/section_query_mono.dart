@@ -10,7 +10,7 @@ class SectionQueryMono extends CableHomePage {
 }
 
 class _SectionQueryMonoState extends State<SectionQueryMono> {
-  final voltageController = TextEditingController();
+  final voltageController = TextEditingController(text: '230');
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final sectionController = TextEditingController();
@@ -113,6 +113,7 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
           Text('Section : '),
           TextField(
             keyboardType: TextInputType.number,
+            readOnly: true,
             controller: sectionController,
           ),
         ],

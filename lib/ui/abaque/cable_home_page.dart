@@ -17,12 +17,6 @@ class _CableHomePageState extends State<CableHomePage> {
   final sectionController = TextEditingController();
   final powerController = TextEditingController();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // }
-
   @override
   void dispose() {
     voltageController.dispose();
