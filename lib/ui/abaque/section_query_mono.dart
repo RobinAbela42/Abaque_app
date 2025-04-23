@@ -1,17 +1,16 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class LengthQueryMono extends CableHomePage {
-  const LengthQueryMono({super.key});
+class SectionQueryMono extends CableHomePage {
+  const SectionQueryMono({super.key});
 
   @override
-  State<LengthQueryMono> createState() => _LengthQueryMonoState();
+  State<SectionQueryMono> createState() => _SectionQueryMonoState();
 }
 
-class _LengthQueryMonoState extends State<LengthQueryMono> {
-  final voltageController = TextEditingController(text: "230");
+class _SectionQueryMonoState extends State<SectionQueryMono> {
+  final voltageController = TextEditingController();
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final sectionController = TextEditingController();
@@ -32,20 +31,21 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
             voltageController == controller) &&
         ((intensityController.text.isNotEmpty && intensity != 0) ||
             intensityController == controller) &&
-        ((sectionController.text.isNotEmpty && section != 0) ||
-            sectionController == controller));
+        ((lengthController.text.isNotEmpty && length != 0) ||
+            lengthController == controller));
   }
 
   @override
   Widget build(BuildContext context) {
-    void fillLength() {
+    void fillSection() {
       if (isEverythingFilled(null)) {
-        length = computeLength(
-          section: section,
+        section = computeSection(
+          // 1rst length is the method's parameter, 2nd length is the variable in ./calcluation/compute_abaque.dart
+          length: length,
           voltage: voltage,
           intensity: intensity,
         );
-        lengthController.text = length.toString();
+        sectionController.text = section.toString();
       }
     }
 
@@ -75,30 +75,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
             onChanged: (value) {
               voltage = stringToNum(str: value);
               updatePUIValue(voltageController);
-              fillLength();
-            },
-          ),
-          Text('Section : '),
-          DropdownButton<num>(items: acceptableSections.map<DropdownMenuItem<num>>((num value) {
-            String res = value.toString();
-            if(value == 0){
-              res="Choisir une section";
-            }
-            return DropdownMenuItem<num>(value:value, child: Text(res));
-          }).toList()
-          ,
-          value: section,
-          onChanged: (value) {},
-          ),
-
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: sectionController,
-
-            onChanged: (value) {
-              section = stringToNum(str: value);
-
-              fillLength();
+              fillSection();
             },
           ),
 
@@ -110,7 +87,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
             onChanged: (value) {
               intensity = stringToNum(str: value);
               updatePUIValue(intensityController);
-              fillLength();
+              fillSection();
             },
           ),
           Text('Power : '),
@@ -120,14 +97,23 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
             onChanged: (value) {
               power = stringToNum(str: value);
               updatePUIValue(powerController);
-              fillLength();
+              fillSection();
             },
           ),
-
           Text('Length : '),
           TextField(
             keyboardType: TextInputType.number,
             controller: lengthController,
+
+            onChanged: (value) {
+              length = stringToNum(str: value);
+              fillSection();
+            },
+          ),
+          Text('Section : '),
+          TextField(
+            keyboardType: TextInputType.number,
+            controller: sectionController,
           ),
         ],
       ),

@@ -1,8 +1,10 @@
   // Length of the section wanted, in meters
-  num _length = 0;
+  import 'dart:io';
+
+num _length = 0;
   
   num get length {
-    return _length;
+    return (_length*100).round()/100;
   }
 
   set length(value) {
@@ -10,6 +12,9 @@
       _length = value;
     }
   }
+
+  List<num> acceptableSections = [0, 1.5, 2.5,4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240 ];
+
 
   // Diameter of the section wanted, in Squares Milimeters
   num _section = 0;
@@ -19,7 +24,17 @@
   }
 
   set section(num value) {
-    _section = ((value * 10).round()) / 10;
+    // bool sectionIsFound = false;
+    // while(!sectionIsFound){
+    //   int i = 0;
+    //   var s = acceptableSections[i];
+    //   if (value<=s){
+    //     _section = s;
+    //     sectionIsFound=true;
+    //   }
+    //   i++;
+    // }
+    _section = value;
   }
 
   // European electrical outlet's Voltage, in Volt
@@ -50,7 +65,7 @@
   num _power = 0;
 
   num get power {
-    return _power;
+    return (_power*100).round()/100;
   }
 
   set power(num value) {
@@ -78,7 +93,7 @@ num computeLength({section, intensity, voltage = 230, resistance = 0.021}) {
 }
 
 num computeSection({length, intensity, voltage = 230, resistance = 0.021}) {
-  return resistance * length * (intensity / voltage);
+  return resistance * length * (intensity*0.8 / voltage*0.02);
 }
 
 num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
@@ -87,4 +102,26 @@ num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
 
 num computeVoltage({section, length, intensity, resistance = 0.021}) {
   return (length * intensity * resistance) / section;
+}
+
+
+num stringToNum({str}) {
+num res = 0;
+if (str != null) {
+  try {
+    res = num.parse(str);
+  } on Exception catch (_) {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: Text('Doit contenir des chiffres uniquement.'),
+    //     );
+    //   },
+    // );
+    return 0;
+  }
+  return res;
+}
+return 0;
 }

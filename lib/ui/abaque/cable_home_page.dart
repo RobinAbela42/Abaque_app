@@ -1,8 +1,7 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
-import 'package:abaque_app/main.dart';
 import 'package:abaque_app/ui/abaque/length_query_mono.dart';
+import 'package:abaque_app/ui/abaque/section_query_mono.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CableHomePage extends StatefulWidget {
   const CableHomePage({super.key});
@@ -34,26 +33,6 @@ class _CableHomePageState extends State<CableHomePage> {
     super.dispose();
   }
 
-  num stringToNum({str}) {
-    num res = 0;
-    if (str != null) {
-      try {
-        res = num.parse(str);
-      } on Exception catch (_) {
-        // showDialog(
-        //   context: context,
-        //   builder: (context) {
-        //     return AlertDialog(
-        //       title: Text('Doit contenir des chiffres uniquement.'),
-        //     );
-        //   },
-        // );
-        return 0;
-      }
-      return res;
-    }
-    return 0;
-  }
 
   bool isEverythingFilled(controller) {
     if ((voltageController.text.isNotEmpty ||
@@ -71,41 +50,6 @@ class _CableHomePageState extends State<CableHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    void fillEverything() {
-      lengthController.text =
-          computeLength(
-            section: section,
-            voltage: voltage,
-            intensity: intensity,
-          ).toString();
-      voltageController.text =
-          computeVoltage(
-            section: section,
-            length: length,
-            intensity: intensity,
-          ).toString();
-      voltageController.text =
-          computeVoltage(
-            section: section,
-            length: length,
-            intensity: intensity,
-          ).toString();
-    }
-
-    void updateFormValue(controller) {
-      if (controller == powerController) {
-        intensityController.text = intensity.toString();
-        voltageController.text = voltage.toString();
-      }
-      if (controller == intensityController) {
-        powerController.text = power.toString();
-        voltageController.text = voltage.toString();
-      }
-      if (controller == voltageController) {
-        powerController.text = power.toString();
-        intensityController.text = intensity.toString();
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(title: Text('Abaque')),
@@ -123,6 +67,18 @@ class _CableHomePageState extends State<CableHomePage> {
                 );
               },
               child: Text('Longueur'),
+            ),
+            Text('Section d\'un câble :'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => SectionQueryMono(),
+                  ),
+                );
+              },
+              child: Text('Section'),
             ),
           ],
         ),
