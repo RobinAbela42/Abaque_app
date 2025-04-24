@@ -2,14 +2,14 @@ import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
 import 'package:flutter/material.dart';
 
-class LengthQueryMono extends CableHomePage {
-  const LengthQueryMono({super.key});
+class IntensityQueryMono extends CableHomePage {
+  const IntensityQueryMono({super.key});
 
   @override
-  State<LengthQueryMono> createState() => _LengthQueryMonoState();
+  State<IntensityQueryMono> createState() => _IntensityQueryMonoState();
 }
 
-class _LengthQueryMonoState extends State<LengthQueryMono> {
+class _IntensityQueryMonoState extends State<IntensityQueryMono> {
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final powerController = TextEditingController();
@@ -25,38 +25,20 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
   }
 
   bool isEverythingFilled(controller) {
-    return (((intensityController.text.isNotEmpty && intensity != 0) ||
-            intensityController == controller) &&
-        section != 0);
+    return (((lengthController.text.isNotEmpty && length != 0) ||
+        lengthController == controller));
   }
 
   @override
   Widget build(BuildContext context) {
-    void fillLength() {
-      if (checkOverloadedError()) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('La section $section mm2 ne peut pas accepter plus de $intensity Ampères.'),
-            );
-          },
-        );
-      }
+    void fillIntensity() {
       if (isEverythingFilled(null)) {
-        length = computeLength(
+        intensity = computeIntensity(
           section: section,
           voltage: voltage,
-          intensity: intensity,
+          length: length,
         );
-        lengthController.text = length.toString();
-      }
-    }
-
-    void updatePUIValue(controller) {
-      if (controller == powerController || controller == null) {
         intensityController.text = intensity.toString();
-      } else if (controller == intensityController || controller == null) {
         powerController.text = power.toString();
       }
     }
@@ -79,8 +61,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
               setState(() {
                 voltage = value!;
               });
-              emptyIntensityAndPower();
-              fillLength();
+              fillIntensity();
             },
           ),
           RadioListTile<num>(
@@ -92,7 +73,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
                 voltage = value!;
               });
               emptyIntensityAndPower();
-              fillLength();
+              fillIntensity();
             },
           ),
           Text('Section : '),
@@ -113,28 +94,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
               setState(() {
                 section = value!;
               });
-              fillLength();
-            },
-          ),
-          Text('Intensity : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: intensityController,
-
-            onChanged: (value) {
-              intensity = stringToNum(str: value);
-              updatePUIValue(intensityController);
-              fillLength();
-            },
-          ),
-          Text('Power : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: powerController,
-            onChanged: (value) {
-              power = stringToNum(str: value);
-              updatePUIValue(powerController);
-              fillLength();
+              fillIntensity();
             },
           ),
 
@@ -142,6 +102,22 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
           TextField(
             keyboardType: TextInputType.number,
             controller: lengthController,
+
+            onChanged: (value) {
+              length = stringToNum(str: value);
+              fillIntensity();
+            },
+
+          ),
+          Text('Intensity : '),
+          TextField(
+            keyboardType: TextInputType.number,
+            controller: intensityController,
+          ),
+          Text('Power : '),
+          TextField(
+            keyboardType: TextInputType.number,
+            controller: powerController,
           ),
         ],
       ),

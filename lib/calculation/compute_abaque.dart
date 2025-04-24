@@ -125,13 +125,16 @@ set power(num value) {
   _intensity = power / voltage;
 }
 
-void checkOverloadedError() {
+bool checkOverloadedError() {
   Section currentSection = acceptableSections.firstWhere(
     (s) => s.sec == section,
   );
-  if (currentSection.overloadedThreshold! <= intensity) {
-    throw Error();
+  if (currentSection.sec != 0 &&
+      intensity != 0 &&
+      currentSection.overloadedThreshold! < intensity) {
+    return true;
   }
+  return false;
 }
 
 // num computeLength_1({section, intensity, voltage = 230, resistance = 0.021}) {
@@ -152,12 +155,11 @@ num computeSection({length, intensity, voltage = 230, resistance = 0.021}) {
       ((voltage * voltageDrop) * voltage * 0.8);
 }
 
-num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
+num computeIntensity_1({section, length, voltage = 230, resistance = 0.021}) {
   return (voltage * section) / length * resistance;
 }
-
-num computeVoltage({section, length, intensity, resistance = 0.021}) {
-  return (length * intensity * resistance) / section;
+num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
+  return (section * (voltage*voltageDrop) *0.8 ) / (2* length * resistance);
 }
 
 num stringToNum({str}) {
@@ -172,3 +174,7 @@ num stringToNum({str}) {
   }
   return 0;
 }
+
+
+
+String debugString ="";

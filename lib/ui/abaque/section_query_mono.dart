@@ -24,6 +24,7 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
   }
 
   bool isEverythingFilled(controller) {
+
     return (((intensityController.text.isNotEmpty && intensity != 0) ||
             intensityController == controller) &&
         ((lengthController.text.isNotEmpty && length != 0) ||
@@ -33,6 +34,7 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
   @override
   Widget build(BuildContext context) {
     void fillSection() {
+
       if (isEverythingFilled(null)) {
         section = computeSection(
           // 1rst length is the method's parameter, 2nd length is the variable in ./calcluation/compute_abaque.dart
@@ -47,6 +49,7 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
     void emptyIntensityAndPower() {
       powerController.text = "";
       intensityController.text = "";
+      sectionController.text="";
     }
 
     void updatePUIValue(controller) {

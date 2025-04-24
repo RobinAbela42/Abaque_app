@@ -1,3 +1,4 @@
+import 'package:abaque_app/ui/abaque/intensity_query_mono.dart';
 import 'package:abaque_app/ui/abaque/length_query_mono.dart';
 import 'package:abaque_app/ui/abaque/section_query_mono.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,18 @@ class _CableHomePageState extends State<CableHomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => SectionQueryMono(),
+                  ),
+                );
+              },
+              child: Text('Section'),
+            ),
+            Text('Intensité de l\'habitation :'),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => IntensityQueryMono(),
                   ),
                 );
               },
