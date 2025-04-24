@@ -10,14 +10,14 @@ class LengthQueryMono extends CableHomePage {
 }
 
 class _LengthQueryMonoState extends State<LengthQueryMono> {
-  final voltageController = TextEditingController(text: "230");
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final powerController = TextEditingController();
 
+  Section selectedSection = Section(0, 0);
+
   @override
   void dispose() {
-    voltageController.dispose();
     lengthController.dispose();
     intensityController.dispose();
     powerController.dispose();
@@ -25,9 +25,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
   }
 
   bool isEverythingFilled(controller) {
-    return (((voltageController.text.isNotEmpty && voltage != 0) ||
-            voltageController == controller) &&
-        ((intensityController.text.isNotEmpty && intensity != 0) ||
+    return (((intensityController.text.isNotEmpty && intensity != 0) ||
             intensityController == controller) &&
         section != 0);
   }
@@ -46,18 +44,17 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
     }
 
     void updatePUIValue(controller) {
-      if (controller == powerController) {
-        intensityController.text = intensity.toString();
-        voltageController.text = voltage.toString();
-      }
-      if (controller == intensityController) {
-        powerController.text = power.toString();
-        voltageController.text = voltage.toString();
-      }
-      if (controller == voltageController) {
-        powerController.text = power.toString();
+      if (controller == powerController || controller == null) {
         intensityController.text = intensity.toString();
       }
+      else if (controller == intensityController || controller == null) {
+        powerController.text = power.toString();
+      }
+    }
+
+    void emptyIntensityAndPower() {
+      powerController.text = "";
+      intensityController.text = "";
     }
 
     return Scaffold(
@@ -65,24 +62,42 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
       body: Column(
         children: [
           Text('Voltage : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: voltageController,
-            onChanged: (value) {
-              voltage = stringToNum(str: value);
-              updatePUIValue(voltageController);
+          RadioListTile<num>(
+            title: const Text('230'),
+            value: singlePhasedVoltage,
+            groupValue: voltage,
+            onChanged: (num? value) {
+              setState(() {
+                voltage = value!;
+              });
+              emptyIntensityAndPower();
+              fillLength();
+            },
+          ),
+          RadioListTile<num>(
+            title: const Text('400'),
+            value: treePhasedVoltage,
+            groupValue: voltage,
+            onChanged: (num? value) {
+              setState(() {
+                voltage = value!;
+              });
+              emptyIntensityAndPower();
               fillLength();
             },
           ),
           Text('Section : '),
           DropdownButton<num>(
             items:
-                acceptableSections.map<DropdownMenuItem<num>>((num value) {
-                  String res = value.toString();
-                  if (value == 0) {
+                acceptableSections.map<DropdownMenuItem<num>>((Section value) {
+                  String res = value.sec.toString();
+                  if (value.sec == 0) {
                     res = "Choisir une section en";
                   }
-                  return DropdownMenuItem<num>(value: value, child: Text("$res mm2"));
+                  return DropdownMenuItem<num>(
+                    value: value.sec,
+                    child: Text("$res mm2"),
+                  );
                 }).toList(),
             value: section,
             onChanged: (num? value) {

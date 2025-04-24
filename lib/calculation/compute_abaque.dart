@@ -1,10 +1,18 @@
-// Supposed to be constants 
+// What is defined by a Section
+class Section {
+  num? sec;
+  num? overloadedThreshold;
+
+  Section(this.sec, this.overloadedThreshold);
+}
+
+// Constants :
 
 // Voltage drop is about 3%
 num _voltageDrop = 3;
 
 num get voltageDrop {
-  return _voltageDrop/100;
+  return _voltageDrop / 100;
 }
 
 set voltageDrop(num value) {
@@ -22,14 +30,13 @@ set resistance(num value) {
   _resistance = value;
 }
 
-
+// Not constants anymore :
 
 // Length of the section wanted, in meters
-
 num _length = 0;
 
 num get length {
-  return (_length*100).round()/100;
+  return (_length * 100).round() / 100;
 }
 
 set length(value) {
@@ -38,8 +45,24 @@ set length(value) {
   }
 }
 
-List<num> acceptableSections = [0, 1.5, 2.5,4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240 ];
-
+List<Section> acceptableSections = [
+  Section(0, 0),
+  Section(1.5, 16),
+  Section(2.5, 20),
+  Section(4, 27),
+  Section(6, 32),
+  Section(10, 45),
+  Section(16, 64),
+  Section(25, 82),
+  Section(35, 91),
+  Section(50, 110),
+  Section(70, 130),
+  Section(95, 190),
+  Section(120, 210),
+  Section(150, 240),
+  Section(185, 270),
+  Section(240, 320),
+];
 
 // Diameter of the section wanted, in Squares Milimeters
 num _section = 0;
@@ -52,40 +75,21 @@ set section(num value) {
   num res = 0;
 
   for (var s in acceptableSections) {
-    if (value <= s) {
-      res = s;
+    if (value <= s.sec!) {
+      res = s.sec!;
       break;
     }
   }
 
-  _section=res;
-
-
-
-  // Iterable<num> rees = acceptableSections.map<num>((num s) {
-  //   if (value >= s){
-  //     res = s;
-  //   }
-  //   return 0;
-  // });
-  // bool sectionIsFound = false;
-  // while(!sectionIsFound){
-  //   int i = 0;
-  //   var s = acceptableSections[i];
-  //   if (value>=s){
-  //     _section = s;
-  //     sectionIsFound=true;
-  //   }
-  //   if (i==50){
-  //     sectionIsFound=true;
-  //   }
-  //   i++;
-  // }
-  // _section = value;
+  _section = res;
 }
 
+// Constants of single-phase and tree-phase voltage
+num treePhasedVoltage = 400;
+num singlePhasedVoltage = 230;
+
 // European electrical outlet's Voltage, in Volt
-num _voltage = 230;
+num _voltage = singlePhasedVoltage;
 
 num get voltage {
   return _voltage;
@@ -93,15 +97,15 @@ num get voltage {
 
 set voltage(num value) {
   _voltage = value;
-  _power=0;
+  _power = 0;
   _intensity = 0;
-} 
+}
 
 // Intensity of the installation, in Amps
 num _intensity = 0;
 
 num get intensity {
-  return (_intensity*1000).round()/1000 ;
+  return (_intensity * 1000).round() / 1000;
 }
 
 set intensity(num value) {
@@ -113,7 +117,7 @@ set intensity(num value) {
 num _power = 0;
 
 num get power {
-  return (_power*100).round()/100;
+  return (_power * 100).round() / 100;
 }
 
 set power(num value) {
@@ -121,21 +125,31 @@ set power(num value) {
   _intensity = power / voltage;
 }
 
-
-
-num computeLength_1({section, intensity, voltage = 230, resistance = 0.021}) {
-  return (voltage * section) / intensity * resistance;
+void checkOverloadedError() {
+  Section currentSection = acceptableSections.firstWhere(
+    (s) => s.sec == section,
+  );
+  if (currentSection.overloadedThreshold! <= intensity) {
+    throw Error();
+  }
 }
-num computeLength_2({section, intensity, voltage = 230, resistance = 0.021}) {
-  return (voltage*voltageDrop * section) / (intensity * resistance *2);
-}
+
+// num computeLength_1({section, intensity, voltage = 230, resistance = 0.021}) {
+//   return (voltage * section) / intensity * resistance;
+// }
+// num computeLength_2({section, intensity, voltage = 230, resistance = 0.021}) {
+//   return (voltage*voltageDrop * section) / (intensity * resistance *2);
+// }
 
 num computeLength({section, intensity, voltage = 230, resistance = 0.021}) {
-  return (((voltage*voltageDrop)*voltage * section)*0.8 / (power * resistance *2));
+  return (((voltage * voltageDrop) * voltage * section) *
+      0.8 /
+      (power * resistance * 2));
 }
 
 num computeSection({length, intensity, voltage = 230, resistance = 0.021}) {
-  return (resistance * 2*length * power) / ((voltage*voltageDrop) * voltage*0.8);
+  return (resistance * 2 * length * power) /
+      ((voltage * voltageDrop) * voltage * 0.8);
 }
 
 num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
@@ -146,16 +160,15 @@ num computeVoltage({section, length, intensity, resistance = 0.021}) {
   return (length * intensity * resistance) / section;
 }
 
-
 num stringToNum({str}) {
-num res = 0;
-if (str != null) {
-  try {
-    res = num.parse(str);
-  } on Exception catch (_) {
-    return 0;
+  num res = 0;
+  if (str != null) {
+    try {
+      res = num.parse(str);
+    } on Exception catch (_) {
+      return 0;
+    }
+    return res;
   }
-  return res;
-}
-return 0;
+  return 0;
 }

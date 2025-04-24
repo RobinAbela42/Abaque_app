@@ -1,8 +1,7 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
-import 'package:abaque_app/ui/abaque/cable_home_page.dart';
 import 'package:flutter/material.dart';
 
-class SectionQueryMono extends CableHomePage {
+class SectionQueryMono extends StatefulWidget {
   const SectionQueryMono({super.key});
 
   @override
@@ -10,7 +9,6 @@ class SectionQueryMono extends CableHomePage {
 }
 
 class _SectionQueryMonoState extends State<SectionQueryMono> {
-  final voltageController = TextEditingController(text: '230');
   final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final sectionController = TextEditingController();
@@ -18,7 +16,6 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
 
   @override
   void dispose() {
-    voltageController.dispose();
     lengthController.dispose();
     intensityController.dispose();
     sectionController.dispose();
@@ -27,9 +24,7 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
   }
 
   bool isEverythingFilled(controller) {
-    return (((voltageController.text.isNotEmpty && voltage != 0) ||
-            voltageController == controller) &&
-        ((intensityController.text.isNotEmpty && intensity != 0) ||
+    return (((intensityController.text.isNotEmpty && intensity != 0) ||
             intensityController == controller) &&
         ((lengthController.text.isNotEmpty && length != 0) ||
             lengthController == controller));
@@ -49,18 +44,16 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
       }
     }
 
+    void emptyIntensityAndPower() {
+      powerController.text = "";
+      intensityController.text = "";
+    }
+
     void updatePUIValue(controller) {
-      if (controller == powerController) {
+      if (controller == powerController || controller == null) {
         intensityController.text = intensity.toString();
-        voltageController.text = voltage.toString();
-      }
-      if (controller == intensityController) {
+      } else if (controller == intensityController || controller == null) {
         powerController.text = power.toString();
-        voltageController.text = voltage.toString();
-      }
-      if (controller == voltageController) {
-        powerController.text = power.toString();
-        intensityController.text = intensity.toString();
       }
     }
 
@@ -69,16 +62,30 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
       body: Column(
         children: [
           Text('Voltage : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: voltageController,
-            onChanged: (value) {
-              voltage = stringToNum(str: value);
-              updatePUIValue(voltageController);
+          RadioListTile<num>(
+            title: const Text('230'),
+            value: singlePhasedVoltage,
+            groupValue: voltage,
+            onChanged: (num? value) {
+              setState(() {
+                voltage = value!;
+              });
+              emptyIntensityAndPower();
               fillSection();
             },
           ),
-
+          RadioListTile<num>(
+            title: const Text('400'),
+            value: treePhasedVoltage,
+            groupValue: voltage,
+            onChanged: (num? value) {
+              setState(() {
+                voltage = value!;
+              });
+              emptyIntensityAndPower();
+              fillSection();
+            },
+          ),
           Text('Intensity : '),
           TextField(
             keyboardType: TextInputType.number,
