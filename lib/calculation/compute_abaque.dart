@@ -1,9 +1,9 @@
 // What is defined by a Section
 class Section {
-  num? sec;
+  num? diameter;
   num? overloadedThreshold;
 
-  Section(this.sec, this.overloadedThreshold);
+  Section(this.diameter, this.overloadedThreshold);
 }
 
 // Constants :
@@ -75,8 +75,8 @@ set section(num value) {
   num res = 0;
 
   for (var s in acceptableSections) {
-    if (value <= s.sec!) {
-      res = s.sec!;
+    if (value <= s.diameter!) {
+      res = s.diameter!;
       break;
     }
   }
@@ -108,6 +108,8 @@ num get intensity {
   return (_intensity * 1000).round() / 1000;
 }
 
+
+
 set intensity(num value) {
   _intensity = value;
   _power = voltage * intensity;
@@ -127,9 +129,9 @@ set power(num value) {
 
 bool checkOverloadedError() {
   Section currentSection = acceptableSections.firstWhere(
-    (s) => s.sec == section,
+    (s) => s.diameter == section,
   );
-  if (currentSection.sec != 0 &&
+  if (currentSection.diameter != 0 &&
       intensity != 0 &&
       currentSection.overloadedThreshold! < intensity) {
     return true;
@@ -158,8 +160,9 @@ num computeSection({length, intensity, voltage = 230, resistance = 0.021}) {
 num computeIntensity_1({section, length, voltage = 230, resistance = 0.021}) {
   return (voltage * section) / length * resistance;
 }
+
 num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
-  return (section * (voltage*voltageDrop) *0.8 ) / (2* length * resistance);
+  return (section * (voltage * voltageDrop) * 0.8) / (2 * length * resistance);
 }
 
 num stringToNum({str}) {
@@ -175,6 +178,4 @@ num stringToNum({str}) {
   return 0;
 }
 
-
-
-String debugString ="";
+String debugString = "";

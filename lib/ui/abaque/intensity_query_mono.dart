@@ -1,5 +1,8 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
+import 'package:abaque_app/ui/abaque/widgets/length_selector.dart';
+import 'package:abaque_app/ui/abaque/widgets/section_selector.dart';
+import 'package:abaque_app/ui/abaque/widgets/voltage_selector.dart';
 import 'package:flutter/material.dart';
 
 class IntensityQueryMono extends CableHomePage {
@@ -10,34 +13,31 @@ class IntensityQueryMono extends CableHomePage {
 }
 
 class _IntensityQueryMonoState extends State<IntensityQueryMono> {
-  final lengthController = TextEditingController();
   final intensityController = TextEditingController();
   final powerController = TextEditingController();
 
-  Section selectedSection = Section(0, 0);
-
   @override
   void dispose() {
-    lengthController.dispose();
     intensityController.dispose();
     powerController.dispose();
     super.dispose();
   }
 
-  bool isEverythingFilled(controller) {
-    return (((lengthController.text.isNotEmpty && length != 0) ||
-        lengthController == controller));
-  }
-
   @override
   Widget build(BuildContext context) {
-    void fillIntensity() {
-      if (isEverythingFilled(null)) {
+    bool isEverythingFilled() {
+      return ((length != 0 && section != 0 && voltage != 0));
+    }
+
+    void fillIntensityAndPower() {
+      debugPrint('Compute intensity before $intensity');
+      if (isEverythingFilled()) {
         intensity = computeIntensity(
           section: section,
           voltage: voltage,
           length: length,
         );
+        debugPrint('Compute intensity after $intensity');
         intensityController.text = intensity.toString();
         powerController.text = power.toString();
       }
@@ -52,62 +52,27 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
       appBar: AppBar(title: const Text('App_name cable')),
       body: Column(
         children: [
-          Text('Voltage : '),
-          RadioListTile<num>(
-            title: const Text('230'),
-            value: singlePhasedVoltage,
-            groupValue: voltage,
-            onChanged: (num? value) {
-              setState(() {
-                voltage = value!;
-              });
-              fillIntensity();
-            },
-          ),
-          RadioListTile<num>(
-            title: const Text('400'),
-            value: treePhasedVoltage,
-            groupValue: voltage,
-            onChanged: (num? value) {
-              setState(() {
-                voltage = value!;
-              });
+          NotificationListener<VoltageNotification>(
+            child: Voltageselector(),
+            onNotification: (notification) {
               emptyIntensityAndPower();
-              fillIntensity();
+              fillIntensityAndPower();
+              return true;
             },
           ),
-          Text('Section : '),
-          DropdownButton<num>(
-            items:
-                acceptableSections.map<DropdownMenuItem<num>>((Section value) {
-                  String res = value.sec.toString();
-                  if (value.sec == 0) {
-                    res = "Choisir une section en";
-                  }
-                  return DropdownMenuItem<num>(
-                    value: value.sec,
-                    child: Text("$res mm2"),
-                  );
-                }).toList(),
-            value: section,
-            onChanged: (num? value) {
-              setState(() {
-                section = value!;
-              });
-              fillIntensity();
+          NotificationListener<SectionNotification>(
+            child: Sectionselector(),
+            onNotification: (notification) {
+              fillIntensityAndPower();
+              return true;
             },
           ),
-
-          Text('Length : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: lengthController,
-
-            onChanged: (value) {
-              length = stringToNum(str: value);
-              fillIntensity();
+          NotificationListener(
+            child: Lengthselector(),
+            onNotification: (notification) {
+              fillIntensityAndPower();
+              return true;
             },
-
           ),
           Text('Intensity : '),
           TextField(
