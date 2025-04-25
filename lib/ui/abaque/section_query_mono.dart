@@ -14,11 +14,7 @@ class SectionQueryMono extends StatefulWidget {
 class _SectionQueryMonoState extends State<SectionQueryMono> {
   final sectionController = TextEditingController();
 
-  @override
-  void dispose() {
-    sectionController.dispose();
-    super.dispose();
-  }
+
 
   bool isEverythingFilled() {
     return ((intensity != 0) && (length != 0));

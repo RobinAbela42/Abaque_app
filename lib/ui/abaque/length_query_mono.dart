@@ -17,14 +17,6 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
 
   Section selectedSection = Section(0, 0);
 
-  @override
-  void dispose() {
-    lengthController.dispose();
-    intensityController.dispose();
-    powerController.dispose();
-    super.dispose();
-  }
-
   bool isEverythingFilled() {
     return (intensity != 0  && 
         section != 0);

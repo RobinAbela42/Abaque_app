@@ -17,27 +17,18 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
   final powerController = TextEditingController();
 
   @override
-  void dispose() {
-    intensityController.dispose();
-    powerController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool isEverythingFilled() {
       return ((length != 0 && section != 0 && voltage != 0));
     }
 
     void fillIntensityAndPower() {
-      debugPrint('Compute intensity before $intensity');
       if (isEverythingFilled()) {
         intensity = computeIntensity(
           section: section,
           voltage: voltage,
           length: length,
         );
-        debugPrint('Compute intensity after $intensity');
         intensityController.text = intensity.toString();
         powerController.text = power.toString();
       }
