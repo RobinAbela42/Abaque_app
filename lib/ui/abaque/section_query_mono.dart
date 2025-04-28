@@ -14,14 +14,13 @@ class SectionQueryMono extends StatefulWidget {
 class _SectionQueryMonoState extends State<SectionQueryMono> {
   final sectionController = TextEditingController();
 
-
-
   bool isEverythingFilled() {
     return ((intensity != 0) && (length != 0));
   }
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     void fillSection() {
       if (isEverythingFilled()) {
         section = computeSection(
@@ -31,23 +30,21 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
           intensity: intensity,
         );
         sectionController.text = section.toString();
-      }
-      else {
+      } else {
         section = 0;
-        sectionController.text ='';
+        sectionController.text = '';
       }
     }
 
     void emptyIntensityAndPower() {
-      powerController.text='';
+      powerController.text = '';
       power = 0;
       intensityController.text = '';
       intensity = 0;
     }
 
-
     return Scaffold(
-      appBar: AppBar(title: const Text('App_name cable')),
+      appBar: AppBar(title: const Text('Section (mm2)')),
       body: Column(
         children: [
           NotificationListener<VoltageNotification>(

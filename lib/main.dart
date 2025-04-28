@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'App_name',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
         home: const HomePage(title: 'App_name Home PAGE'),
       ),
@@ -46,52 +47,54 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Color(0x00FF0000),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                'Choisir sa section ou la longueur du câble souhaité :',
-                textAlign: TextAlign.center,
-              ),
-              ElevatedButton(
-                style: menuButton,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => CableHomePage(),
-                    ),
-                  );
-                },
-                child: const Text('Section cable'),
-              ),
-              Text(
-                'Applications des normes C15-100',
-                textAlign: TextAlign.center,
-              ),
-              ElevatedButton(
-                style: menuButton,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => CableHomePage(),
-                    ),
-                  );
-                },
-                child: const Text('Section cable'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    return CableHomePage();
+    
+    // Scaffold(
+    //   appBar: AppBar(
+    //     title: Text(widget.title),
+    //     backgroundColor: Color(0x00FF0000),
+    //   ),
+    //   body: Padding(
+    //     padding: const EdgeInsets.all(32.0),
+    //     child: Center(
+    //       child: Column(
+    //         children: [
+    //           Text(
+    //             'Choisir sa section ou la longueur du câble souhaité :',
+    //             textAlign: TextAlign.center,
+    //           ),
+    //           ElevatedButton(
+    //             style: menuButton,
+    //             onPressed: () {
+    //               Navigator.push(
+    //                 context,
+    //                 MaterialPageRoute(
+    //                   builder: (BuildContext context) => CableHomePage(),
+    //                 ),
+    //               );
+    //             },
+    //             child: const Text('Section cable'),
+    //           ),
+    //           Text(
+    //             'Applications des normes C15-100',
+    //             textAlign: TextAlign.center,
+    //           ),
+    //           ElevatedButton(
+    //             style: menuButton,
+    //             onPressed: () {
+    //               Navigator.push(
+    //                 context,
+    //                 MaterialPageRoute(
+    //                   builder: (BuildContext context) => CableHomePage(),
+    //                 ),
+    //               );
+    //             },
+    //             child: const Text('Section cable'),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

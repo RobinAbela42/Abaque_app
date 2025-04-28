@@ -18,12 +18,12 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
   Section selectedSection = Section(0, 0);
 
   bool isEverythingFilled() {
-    return (intensity != 0  && 
-        section != 0);
+    return (intensity != 0 && section != 0);
   }
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     void fillLength() {
       if (checkOverloadedError()) {
         showDialog(
@@ -44,23 +44,22 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
           intensity: intensity,
         );
         lengthController.text = length.toString();
-      }
-      else {
+      } else {
         length = 0;
-        lengthController.text ='';
+        lengthController.text = '';
       }
     }
 
     void emptyIntensityAndPower() {
       debugPrint('EmptyIandP');
       powerController.text = '';
-      power=0;
+      power = 0;
       intensityController.text = '';
-      intensity=0;
+      intensity = 0;
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('App_name cable')),
+      appBar: AppBar(title: const Text('Longueur (M)')),
       body: Column(
         children: [
           NotificationListener<VoltageNotification>(

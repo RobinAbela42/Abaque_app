@@ -14,37 +14,82 @@ final intensityController = TextEditingController();
 final powerController = TextEditingController();
 
 class _IntensitypowerselectorState extends State<Intensitypowerselector> {
-
-
   @override
   Widget build(BuildContext context) {
-    return Table(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        TableRow(children: [Text('Intensity :'), Text('Power : ')]),
-        TableRow(
-          children: [
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: intensityController,
-
-              onChanged: (value) {
-                intensity = stringToNum(str: value);
-                powerController.text = power.toString();
-                IntensityPowerNotification().dispatch(context);
-              },
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              children: [
+                Text('Intensitée :'),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  controller: intensityController,
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  onChanged: (value) {
+                    intensity = stringToNum(str: value);
+                    powerController.text = power.toString();
+                    IntensityPowerNotification().dispatch(context);
+                  },
+                ),
+              ],
             ),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: powerController,
-              onChanged: (value) {
-                power = stringToNum(str: value);
-                intensityController.text = intensity.toString();
-                IntensityPowerNotification().dispatch(context);
-              },
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              children: [
+                Text('Puissance :'),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  controller: powerController,
+                  onChanged: (value) {
+                    power = stringToNum(str: value);
+                    intensityController.text = intensity.toString();
+                    IntensityPowerNotification().dispatch(context);
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ],
     );
+
+    // Table(
+    //   children: [
+    //     TableRow(children: ),
+    //     TableRow(
+    //       children: [
+    //         TextField(
+    //           keyboardType: TextInputType.number,
+    //           controller: intensityController,
+
+    //           onChanged: (value) {
+    //             intensity = stringToNum(str: value);
+    //             powerController.text = power.toString();
+    //             IntensityPowerNotification().dispatch(context);
+    //           },
+    //         ),
+    //         TextField(
+    //           keyboardType: TextInputType.number,
+    //           controller: powerController,
+    //           onChanged: (value) {
+    //             power = stringToNum(str: value);
+    //             intensityController.text = intensity.toString();
+    //             IntensityPowerNotification().dispatch(context);
+    //           },
+    //         ),
+    //       ],
+    //     ),
+    //   ],
+    // );
   }
 }

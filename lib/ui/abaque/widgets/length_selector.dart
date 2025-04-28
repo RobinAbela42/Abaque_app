@@ -22,23 +22,30 @@ class _LengthselectorState extends State<Lengthselector> {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      children: [
-        TableRow(children: [Text('Length : ')]),
-        TableRow(
+        var theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Table(
           children: [
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: lengthController,
-
-              onChanged: (value) {
-                length = stringToNum(str: value);
-                LengthNotification().dispatch(context);
-              },
+            TableRow(children: [Center(child: Text('Longueur : '))]),
+            TableRow(
+              children: [
+                TextField(
+                  keyboardType: TextInputType.number,
+                  controller: lengthController,
+                  decoration: InputDecoration(border: OutlineInputBorder(), fillColor: theme.colorScheme.surface),
+                  onChanged: (value) {
+                    length = stringToNum(str: value);
+                    LengthNotification().dispatch(context);
+                  },
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }

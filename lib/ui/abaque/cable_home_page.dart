@@ -11,82 +11,102 @@ class CableHomePage extends StatefulWidget {
 }
 
 class _CableHomePageState extends State<CableHomePage> {
-  final voltageController = TextEditingController();
-  final lengthController = TextEditingController();
-  final intensityController = TextEditingController();
-  final sectionController = TextEditingController();
-  final powerController = TextEditingController();
-
-  @override
-  void dispose() {
-    voltageController.dispose();
-    lengthController.dispose();
-    intensityController.dispose();
-    sectionController.dispose();
-    powerController.dispose();
-    super.dispose();
-  }
-
-
-  bool isEverythingFilled(controller) {
-    if ((voltageController.text.isNotEmpty ||
-            voltageController == controller) &&
-        (lengthController.text.isNotEmpty || lengthController == controller) &&
-        (intensityController.text.isNotEmpty ||
-            intensityController == controller) &&
-        (sectionController.text.isNotEmpty ||
-            sectionController == controller)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-
+    var theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Abaque')),
+      appBar: AppBar(
+        title: Text('Abaque'),
+        backgroundColor: theme.colorScheme.primary,
+      ),
+      backgroundColor: theme.colorScheme.primaryContainer,
       body: Center(
         child: Column(
           children: [
-            Text('Longueur du câble :'),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => LengthQueryMono(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    'Que voulez-vous calculer ?',
+                    style: TextStyle(fontSize: 20),
                   ),
-                );
-              },
-              child: Text('Longueur'),
+                ],
+              ),
             ),
-            Text('Section d\'un câble :'),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SectionQueryMono(),
-                  ),
-                );
-              },
-              child: Text('Section'),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: BigCard(
+                cardName: 'Longueur',
+                cardSubtitle: 'Mètre (m)',
+                widgetToGo: LengthQueryMono(),
+              ),
             ),
-            Text('Intensité de l\'habitation :'),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => IntensityQueryMono(),
-                  ),
-                );
-              },
-              child: Text('Section'),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: BigCard(
+                cardName: 'Section',
+                cardSubtitle: 'Diamètre en milimètre carré (mm2)',
+                widgetToGo: SectionQueryMono(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: BigCard(
+                cardName: 'Intensité / Puissance',
+                cardSubtitle: 'Ampères (A) / Watt (W)',
+                widgetToGo: IntensityQueryMono(),
+              ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class BigCard extends StatelessWidget {
+  const BigCard({
+    super.key,
+    required this.cardName,
+    required this.widgetToGo,
+    required this.cardSubtitle,
+  });
+  final String cardName;
+  final String cardSubtitle;
+  final Widget widgetToGo;
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      color: theme.colorScheme.primary,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => widgetToGo),
+          );
+        },
+        borderRadius: BorderRadius.circular(10),
+        child: ListTile(
+          title: Text(cardName, style: TextStyle(color: theme.colorScheme.surface, fontWeight: FontWeight.bold)),
+          subtitle: Text(cardSubtitle, style: TextStyle(color: theme.colorScheme.surfaceDim)),
+          style: ListTileStyle.values.first,
+          // width: 300,
+          // height: 100,
+
+          // child: Center(
+          //   child: Text(
+          //     cardName,
+          //     style: TextStyle(
+          //       fontSize: 18,
+          //       fontFamily: "",
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
         ),
       ),
     );
