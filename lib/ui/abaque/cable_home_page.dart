@@ -16,7 +16,11 @@ class _CableHomePageState extends State<CableHomePage> {
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Abaque'),
+        title: Text(
+          'AbaCalc',
+          style: TextStyle(color: theme.colorScheme.surface),
+        ),
+        leading: Icon(Icons.home),
         backgroundColor: theme.colorScheme.primary,
       ),
       backgroundColor: theme.colorScheme.primaryContainer,
@@ -24,15 +28,23 @@ class _CableHomePageState extends State<CableHomePage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Text(
-                    'Que voulez-vous calculer ?',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Text(
+                textAlign: TextAlign.center,
+
+                'Que voulez-vous calculer ?',
+                softWrap: true,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.inverseSurface,
+                ),
               ),
+            ),
+            SizedBox(
+              width: 60,
+              height: 60,
+              child: Image(image: AssetImage("assets/emojis/mascot_thinking.png")),
             ),
             Padding(
               padding: const EdgeInsets.all(25.0),
@@ -91,8 +103,17 @@ class BigCard extends StatelessWidget {
         },
         borderRadius: BorderRadius.circular(10),
         child: ListTile(
-          title: Text(cardName, style: TextStyle(color: theme.colorScheme.surface, fontWeight: FontWeight.bold)),
-          subtitle: Text(cardSubtitle, style: TextStyle(color: theme.colorScheme.surfaceDim)),
+          title: Text(
+            cardName,
+            style: TextStyle(
+              color: theme.colorScheme.surface,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(
+            cardSubtitle,
+            style: TextStyle(color: theme.colorScheme.surfaceDim),
+          ),
           style: ListTileStyle.values.first,
           // width: 300,
           // height: 100,
