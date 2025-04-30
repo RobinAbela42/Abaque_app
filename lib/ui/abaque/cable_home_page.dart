@@ -17,60 +17,99 @@ class _CableHomePageState extends State<CableHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'AbaCalc',
+          'AbaCâble',
           style: TextStyle(color: theme.colorScheme.surface),
         ),
         leading: Icon(Icons.home),
         backgroundColor: theme.colorScheme.primary,
       ),
-      backgroundColor: theme.colorScheme.primaryContainer,
+      backgroundColor: theme.colorScheme.primaryFixedDim,
       body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Text(
-                textAlign: TextAlign.center,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Text(
+                  textAlign: TextAlign.center,
 
-                'Que voulez-vous calculer ?',
-                softWrap: true,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.inverseSurface,
+                  'Que voulez-vous calculer ?',
+                  softWrap: true,
+                  style: TextStyle(
+                    height: 1,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.inverseSurface,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: 60,
-              height: 60,
-              child: Image(image: AssetImage("assets/emojis/mascot_thinking.png")),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: BigCard(
-                cardName: 'Longueur',
-                cardSubtitle: 'Mètre (m)',
-                widgetToGo: LengthQueryMono(),
+              SizedBox(
+                width: 120,
+                height: 120,
+                child: Image(image: AssetImage("assets/emojis/thinking-2.png")),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: BigCard(
-                cardName: 'Section',
-                cardSubtitle: 'Diamètre en milimètre carré (mm2)',
-                widgetToGo: SectionQueryMono(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: BigCard(
+                  cardName: 'La longueur ?',
+                  cardSubtitle: 'Mètre (m)',
+                  widgetToGo: LengthQueryMono(),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: BigCard(
-                cardName: 'Intensité / Puissance',
-                cardSubtitle: 'Ampères (A) / Watt (W)',
-                widgetToGo: IntensityQueryMono(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: BigCard(
+                  cardName: 'La section ?',
+                  cardSubtitle: 'Milimètre carré (mm2)',
+                  widgetToGo: SectionQueryMono(),
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: BigCard(
+                  cardName: 'L\'intensité / la puissance ?',
+                  cardSubtitle: 'Ampères (A) / Watt (W)',
+                  widgetToGo: IntensityQueryMono(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                child: InkWell(
+                  child: Text(
+                    'Besoin d\'aide ?',
+                    style: TextStyle(decoration: TextDecoration.underline),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                            "Explication",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Une Abaque est un tableau grâce auquel on peut trouver les bonnes façons de poser des câbles, sans surchauffe de ces derniers par exemple.\n\nCette application fait la même chose, en plus simple ! On vous aide à trouver la longueur parfaite, la section idéale, ou l'intensitée maximum sur une installation. \n\nCliquez sur ce même bouton dans les pages pour voir avoir plus de détails !",
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -115,19 +154,6 @@ class BigCard extends StatelessWidget {
             style: TextStyle(color: theme.colorScheme.surfaceDim),
           ),
           style: ListTileStyle.values.first,
-          // width: 300,
-          // height: 100,
-
-          // child: Center(
-          //   child: Text(
-          //     cardName,
-          //     style: TextStyle(
-          //       fontSize: 18,
-          //       fontFamily: "",
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // ),
         ),
       ),
     );

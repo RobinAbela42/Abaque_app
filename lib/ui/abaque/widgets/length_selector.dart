@@ -29,13 +29,15 @@ class _LengthselectorState extends State<Lengthselector> {
         padding: const EdgeInsets.all(25.0),
         child: Table(
           children: [
-            TableRow(children: [Center(child: Text('Longueur : '))]),
+            TableRow(children: [Center(child: Text('Longueur : ', style: TextStyle(color: theme.colorScheme.surface)))]),
             TableRow(
               children: [
                 TextField(
                   keyboardType: TextInputType.number,
+                  style: TextStyle(color: theme.colorScheme.surface),
                   controller: lengthController,
-                  decoration: InputDecoration(border: OutlineInputBorder(), fillColor: theme.colorScheme.surface),
+                  
+                  decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5))), fillColor: theme.colorScheme.surface),
                   onChanged: (value) {
                     length = stringToNum(str: value);
                     LengthNotification().dispatch(context);

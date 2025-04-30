@@ -1,5 +1,6 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:flutter/material.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class Sectionselector extends StatefulWidget {
   const Sectionselector({super.key});
@@ -17,7 +18,7 @@ class _SectionselectorState extends State<Sectionselector> {
     return Card(
       color: theme.colorScheme.primary,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(25),
         child: Table(
           children: [
             TableRow(
@@ -32,9 +33,27 @@ class _SectionselectorState extends State<Sectionselector> {
             ),
             TableRow(
               children: [
-                DropdownButton<num>(
-                  style: TextStyle(color: theme.colorScheme.primary),
-                  borderRadius: BorderRadius.all(Radius.elliptical(15, 15)),
+                DropdownButton2<num>(
+                  isExpanded: true,
+                  underline: SizedBox(width: 0, height: 0),
+                  style: TextStyle(color: theme.colorScheme.surface),
+                  buttonStyleData: ButtonStyleData(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: theme.colorScheme.scrim),
+                    ),
+                  ),
+                  iconStyleData: IconStyleData(
+                    iconEnabledColor: theme.colorScheme.surface,
+                  ),
+
+                  dropdownStyleData: DropdownStyleData(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: theme.colorScheme.onPrimaryFixedVariant,
+                    ),
+                  ),
                   items:
                       acceptableSections.map<DropdownMenuItem<num>>((
                         Section value,
