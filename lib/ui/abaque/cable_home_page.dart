@@ -73,7 +73,10 @@ class _CableHomePageState extends State<CableHomePage> {
                   widgetToGo: IntensityQueryMono(),
                 ),
               ),
-              HelpButton(text: "Une Abaque est un tableau grâce auquel on peut trouver les bonnes façons de poser des câbles, sans surchauffe de ces derniers par exemple.\n\nCette application fait la même chose, en plus simple ! On vous aide à trouver la longueur parfaite, la section idéale, ou l'intensitée maximum sur une installation. \n\nCliquez sur ce même bouton dans les pages pour voir avoir plus de détails !")
+              HelpButton(
+                text:
+                    "Une Abaque est un tableau grâce auquel on peut trouver les bonnes façons de poser des câbles, sans surchauffe de ces derniers par exemple.\n\nCette application fait la même chose, en plus simple ! On vous aide à trouver la longueur parfaite, la section idéale, ou l'intensitée maximum sur une installation. \n\nCliquez sur ce même bouton dans les pages pour voir avoir plus de détails !",
+              ),
             ],
           ),
         ),
@@ -121,6 +124,24 @@ class BigCard extends StatelessWidget {
           ),
           style: ListTileStyle.values.first,
         ),
+      ),
+    );
+  }
+}
+
+class ResultCard extends StatelessWidget {
+  const ResultCard({super.key, required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Card(
+        color: theme.colorScheme.primaryFixedDim,
+        child: Column(children: children),
       ),
     );
   }

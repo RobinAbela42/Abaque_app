@@ -33,7 +33,7 @@ class _IntensitypowerselectorState extends State<Intensitypowerselector> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Text(
-                        'Intensitée :',
+                        'Intensité :\n(à renseigner)',
                         style: TextStyle(color: theme.colorScheme.surface),
                       ),
                     ),
@@ -77,7 +77,7 @@ class _IntensitypowerselectorState extends State<Intensitypowerselector> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Text(
-                        'Puissance :',
+                        'Puissance :\n(à renseigner)',
                         style: TextStyle(color: theme.colorScheme.surface),
                       ),
                     ),

@@ -34,7 +34,7 @@ class _LengthselectorState extends State<Lengthselector> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Text(
-                      'Longueur (À renseigner) : ',
+                      'Longueur (à renseigner) : ',
                       style: TextStyle(color: theme.colorScheme.surface),
                     ),
                   ),

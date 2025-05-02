@@ -27,7 +27,7 @@ class _SectionselectorState extends State<Sectionselector> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0,0,0,10),
                     child: Text(
-                      'Section (À renseigner) : ',
+                      'Section (à renseigner) : ',
                       style: TextStyle(color: theme.colorScheme.surface),
                     ),
                   ),

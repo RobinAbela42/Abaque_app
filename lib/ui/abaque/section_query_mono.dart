@@ -1,4 +1,5 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
+import 'package:abaque_app/ui/abaque/cable_home_page.dart';
 import 'package:abaque_app/ui/abaque/widgets/help_button.dart';
 import 'package:abaque_app/ui/abaque/widgets/intensity_power_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/length_selector.dart';
@@ -107,27 +108,48 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
                   return true;
                 },
               ),
-              Wrap(
-                runAlignment: WrapAlignment.center,
-                alignment: WrapAlignment.center,
+              ResultCard(
                 children: [
-                  Text(
-                    'Résultat : ',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                  Wrap(
+                    runAlignment: WrapAlignment.center,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      Text(
+                        'Résultat : ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
 
-                  SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image(image: currentEmoji),
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image(image: currentEmoji),
+                      ),
+                    ],
+                  ),
+                  Text('Section : '),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20,0,20,10),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ),
+                      controller: sectionController,
+                    ),
                   ),
                 ],
-              ),
-              Text('Section : '),
-              TextField(
-                keyboardType: TextInputType.number,
-                readOnly: true,
-                controller: sectionController,
               ),
               HelpButton(
                 text:
@@ -138,26 +160,26 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
         ),
       ),
       //Debug
-      floatingActionButton: FloatingActionButton(
-        child: Text('Debug'),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(
-                  '\nlength : ${length.toString()}'
-                  '\nresistance : ${resistance.toString()}'
-                  '\nsection : ${section.toString()}'
-                  '\nvoltage : ${voltage.toString()}'
-                  '\npower : ${power.toString()}'
-                  '\nintensity : ${intensity.toString()}',
-                ),
-              );
-            },
-          );
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Text('Debug'),
+      //   onPressed: () {
+      //     showDialog(
+      //       context: context,
+      //       builder: (context) {
+      //         return AlertDialog(
+      //           content: Text(
+      //             '\nlength : ${length.toString()}'
+      //             '\nresistance : ${resistance.toString()}'
+      //             '\nsection : ${section.toString()}'
+      //             '\nvoltage : ${voltage.toString()}'
+      //             '\npower : ${power.toString()}'
+      //             '\nintensity : ${intensity.toString()}',
+      //           ),
+      //         );
+      //       },
+      //     );
+      //   },
+      // ),
     );
   }
 }

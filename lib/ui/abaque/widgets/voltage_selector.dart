@@ -69,7 +69,7 @@ class _VoltageselectorState extends State<Voltageselector> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
               child: Text(
-                'Voltage (À renseigner) :',
+                'Voltage (à renseigner) :',
                 style: TextStyle(color: theme.colorScheme.surface),
               ),
             ),

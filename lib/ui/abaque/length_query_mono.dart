@@ -41,7 +41,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
           builder: (context) {
             return AlertDialog(
               title: Text(
-                'La section $section mm2 ne peut pas accepter plus de $intensity Ampères.',
+                'La section $section mm2 ne peut pas accepter plus de $intensity Ampères. \n\nChoisissez une section plus grande, ou diminuez l\'intensité.',
               ),
             );
           },
@@ -88,88 +88,111 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
         ),
       ),
       backgroundColor: theme.colorScheme.primaryFixedDim,
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            NotificationListener<VoltageNotification>(
-              child: Voltageselector(),
-              onNotification: (notification) {
-                emptyIntensityAndPower();
-                emptyLength();
-                fillLength();
-                updateImage();
-                return true;
-              },
-            ),
-            NotificationListener<SectionNotification>(
-              child: Sectionselector(),
-              onNotification: (notification) {
-                emptyLength();
-                fillLength();
-                updateImage();
-                return true;
-              },
-            ),
-            NotificationListener<IntensityPowerNotification>(
-              child: Intensitypowerselector(),
-              onNotification: (notification) {
-                emptyLength();
-                fillLength();
-                updateImage();
-                return true;
-              },
-            ),
-            Wrap(
-              runAlignment: WrapAlignment.center,
-              alignment: WrapAlignment.center,
-              children: [
-                Text(
-                  'Résultat : ',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Image(image: currentEmoji),
-                ),
-              ],
-            ),
-            Text('Longueur : '),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: lengthController,
-              readOnly: true,
-            ),
-            HelpButton(
-              text:
-                  "Cette page vous est utile pour calculer la longueur maximum pour un câble, correspondant à une certaine intensitée, une section et un voltage. \n\nRemplissez les 3 cases à renseigner avec les valeurs dont vous disposez, puis lisez le resultat ! \n\nIl est fortement déconseiller d'utiliser un câble avec une longueur plus élevée que celle conseillée, pour des raisons de sécuritée veuillez privilégier une valeur plus basse.",
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              NotificationListener<VoltageNotification>(
+                child: Voltageselector(),
+                onNotification: (notification) {
+                  emptyIntensityAndPower();
+                  emptyLength();
+                  fillLength();
+                  updateImage();
+                  return true;
+                },
+              ),
+              NotificationListener<SectionNotification>(
+                child: Sectionselector(),
+                onNotification: (notification) {
+                  emptyLength();
+                  fillLength();
+                  updateImage();
+                  return true;
+                },
+              ),
+              NotificationListener<IntensityPowerNotification>(
+                child: Intensitypowerselector(),
+                onNotification: (notification) {
+                  emptyLength();
+                  fillLength();
+                  updateImage();
+                  return true;
+                },
+              ),
+              ResultCard(
+                children: [
+                  Wrap(
+                    runAlignment: WrapAlignment.center,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      Text(
+                        'Résultat : ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+        
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image(image: currentEmoji),
+                      ),
+                    ],
+                  ),
+                  Text('Longueur : '),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20,0,20,10),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ),
+                      keyboardType: TextInputType.number,
+                      controller: lengthController,
+                      readOnly: true,
+                    ),
+                  ),
+                ],
+              ),
+              HelpButton(
+                text:
+                    "Cette page vous est utile pour calculer la longueur maximum pour un câble, correspondant à une certaine intensitée, une section et un voltage. \n\nRemplissez les 3 cases à renseigner avec les valeurs dont vous disposez, puis lisez le resultat ! \n\nIl est fortement déconseiller d'utiliser un câble avec une longueur plus élevée que celle conseillée, pour des raisons de sécuritée veuillez privilégier une valeur plus basse.",
+              ),
+            ],
+          ),
         ),
       ),
       //Debug
-      floatingActionButton: FloatingActionButton(
-        child: Text('Debug'),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(
-                  '\nlength : ${length.toString()}'
-                  '\nresistance : ${resistance.toString()}'
-                  '\nsection : ${section.toString()}'
-                  '\nvoltage : ${voltage.toString()}'
-                  '\npower : ${power.toString()}'
-                  '\nintensity : ${intensity.toString()}',
-                ),
-              );
-            },
-          );
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Text('Debug'),
+      //   onPressed: () {
+      //     showDialog(
+      //       context: context,
+      //       builder: (context) {
+      //         return AlertDialog(
+      //           content: Text(
+      //             '\nlength : ${length.toString()}'
+      //             '\nresistance : ${resistance.toString()}'
+      //             '\nsection : ${section.toString()}'
+      //             '\nvoltage : ${voltage.toString()}'
+      //             '\npower : ${power.toString()}'
+      //             '\nintensity : ${intensity.toString()}',
+      //           ),
+      //         );
+      //       },
+      //     );
+      //   },
+      // ),
     );
   }
 }
