@@ -1,5 +1,6 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
+import 'package:abaque_app/ui/abaque/widgets/help_button.dart';
 import 'package:abaque_app/ui/abaque/widgets/length_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/section_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/voltage_selector.dart';
@@ -12,13 +13,23 @@ class IntensityQueryMono extends CableHomePage {
   State<IntensityQueryMono> createState() => _IntensityQueryMonoState();
 }
 
+
 class _IntensityQueryMonoState extends State<IntensityQueryMono> {
   final intensityController = TextEditingController();
   final powerController = TextEditingController();
 
+  AssetImage currentEmoji = AssetImage("assets/emojis/thinking.png");
+
+  @override
+  initState() {
+    super.initState();
+    currentEmoji = AssetImage('assets/emojis/thinking.png');
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+
     bool isEverythingFilled() {
       return ((length != 0 && section != 0 && voltage != 0));
     }
@@ -36,53 +47,94 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
     }
 
     void emptyIntensityAndPower() {
+      power=0;
+      intensity=0;
       powerController.text = "";
       intensityController.text = "";
+    }
+
+    void updateImage() {
+      setState(() {
+        if (intensity != 0) {
+          currentEmoji = AssetImage("assets/emojis/smiling.png");
+        } else {
+          currentEmoji = AssetImage("assets/emojis/thinking.png");
+        }
+      });
     }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.colorScheme.primary,
-        title: const Text('Intensitée (A)'),
+        title: Text(
+          'Intensitée (A)',
+          style: TextStyle(color: theme.colorScheme.surface),
+        ),
       ),
-      backgroundColor: theme.colorScheme.primaryContainer,
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            NotificationListener<VoltageNotification>(
-              child: Voltageselector(),
-              onNotification: (notification) {
-                emptyIntensityAndPower();
-                fillIntensityAndPower();
-                return true;
-              },
-            ),
-            NotificationListener<SectionNotification>(
-              child: Sectionselector(),
-              onNotification: (notification) {
-                fillIntensityAndPower();
-                return true;
-              },
-            ),
-            NotificationListener(
-              child: Lengthselector(),
-              onNotification: (notification) {
-                fillIntensityAndPower();
-                return true;
-              },
-            ),
-            Text('Intensity : '),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: intensityController,
-            ),
-            Text('Power : '),
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: powerController,
-            ),
-          ],
+      backgroundColor: theme.colorScheme.primaryFixedDim,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              NotificationListener<VoltageNotification>(
+                child: Voltageselector(),
+                onNotification: (notification) {
+                  emptyIntensityAndPower();
+                  fillIntensityAndPower();
+                  updateImage();
+                  return true;
+                },
+              ),
+              NotificationListener<SectionNotification>(
+                child: Sectionselector(),
+                onNotification: (notification) {
+                  emptyIntensityAndPower();
+                  fillIntensityAndPower();
+                  updateImage();
+                  return true;
+                },
+              ),
+              NotificationListener<LengthNotification>(
+                child: Lengthselector(),
+                onNotification: (notification) {
+                  emptyIntensityAndPower();
+                  fillIntensityAndPower();
+                  updateImage();
+                  return true;
+                },
+              ),
+              Wrap(
+                runAlignment: WrapAlignment.center,
+                alignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    'Résultat : ',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image(image: currentEmoji),
+                  ),
+                ],
+              ),
+              Text('Intensitée : '),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: intensityController,
+                readOnly: true,
+              ),
+              Text('Puissance : '),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: powerController,
+                readOnly: true,
+              ),
+              HelpButton(text: "Cette page vous est utile pour calculer l'intensitée maximum possible pour une installation, à partir d'une section de câble, d'une longueur et d'un voltage. \n\nRemplissez les 3 cases à renseigner avec les valeurs dont vous disposez, puis lisez le resultat ! \n\nLa puissance est calculée en fonction de l'intensitée, les deux sont donc remplie en même temps.")
+            ],
+          ),
         ),
       ),
       //Debug

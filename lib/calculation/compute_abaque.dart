@@ -1,4 +1,6 @@
 // What is defined by a Section
+import 'package:flutter/material.dart';
+
 class Section {
   num? diameter;
   num? overloadedThreshold;
@@ -85,7 +87,7 @@ set section(num value) {
 }
 
 // Constants of single-phase and tree-phase voltage
-num treePhasedVoltage = 400;
+num threePhasedVoltage = 400;
 num singlePhasedVoltage = 230;
 
 // European electrical outlet's Voltage, in Volt
@@ -179,3 +181,5 @@ num stringToNum({str}) {
 }
 
 String debugString = "";
+
+class EmojiResultatNotification extends LayoutChangedNotification {}

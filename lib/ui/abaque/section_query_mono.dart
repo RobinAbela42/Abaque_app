@@ -1,4 +1,5 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
+import 'package:abaque_app/ui/abaque/widgets/help_button.dart';
 import 'package:abaque_app/ui/abaque/widgets/intensity_power_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/length_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/voltage_selector.dart';
@@ -14,13 +15,22 @@ class SectionQueryMono extends StatefulWidget {
 class _SectionQueryMonoState extends State<SectionQueryMono> {
   final sectionController = TextEditingController();
 
-  bool isEverythingFilled() {
-    return ((intensity != 0) && (length != 0));
+  AssetImage currentEmoji = AssetImage("assets/emojis/thinking.png");
+
+  @override
+  initState() {
+    super.initState();
+    currentEmoji = AssetImage('assets/emojis/thinking.png');
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+
+    bool isEverythingFilled() {
+      return (intensity != 0 && length != 0 && voltage != 0);
+    }
+
     void fillSection() {
       if (isEverythingFilled()) {
         section = computeSection(
@@ -30,52 +40,102 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
           intensity: intensity,
         );
         sectionController.text = section.toString();
-      } else {
-        section = 0;
-        sectionController.text = '';
       }
     }
 
     void emptyIntensityAndPower() {
-      powerController.text = '';
       power = 0;
-      intensityController.text = '';
       intensity = 0;
+      powerController.text = '';
+      intensityController.text = '';
+    }
+
+    void emptySection() {
+      section = 0;
+      sectionController.text = '';
+    }
+
+    void updateImage() {
+      setState(() {
+        if (section != 0) {
+          currentEmoji = AssetImage("assets/emojis/smiling.png");
+        } else {
+          currentEmoji = AssetImage("assets/emojis/thinking.png");
+        }
+      });
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Section (mm2)')),
-      body: Column(
-        children: [
-          NotificationListener<VoltageNotification>(
-            child: Voltageselector(),
-            onNotification: (notification) {
-              emptyIntensityAndPower();
-              fillSection();
-              return true;
-            },
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.primary,
+        title: Text(
+          'Section (mm2)',
+          style: TextStyle(color: theme.colorScheme.surface),
+        ),
+      ),
+      backgroundColor: theme.colorScheme.primaryFixedDim,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              NotificationListener<VoltageNotification>(
+                child: Voltageselector(),
+                onNotification: (notification) {
+                  emptyIntensityAndPower();
+                  emptySection();
+                  fillSection();
+                  updateImage();
+                  return true;
+                },
+              ),
+              NotificationListener<IntensityPowerNotification>(
+                child: Intensitypowerselector(),
+                onNotification: (notification) {
+                  emptySection();
+                  fillSection();
+                  updateImage();
+                  return true;
+                },
+              ),
+              NotificationListener<LengthNotification>(
+                child: Lengthselector(),
+                onNotification: (notification) {
+                  emptySection();
+                  fillSection();
+                  updateImage();
+                  return true;
+                },
+              ),
+              Wrap(
+                runAlignment: WrapAlignment.center,
+                alignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    'Résultat : ',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image(image: currentEmoji),
+                  ),
+                ],
+              ),
+              Text('Section : '),
+              TextField(
+                keyboardType: TextInputType.number,
+                readOnly: true,
+                controller: sectionController,
+              ),
+              HelpButton(
+                text:
+                    "Cette page vous est utile pour calculer la section idéale pour un câble, correspondant à une certaine intensitée, une longueur et un voltage. \n\nRemplissez les 3 cases à renseigner avec les valeurs dont vous disposez, puis lisez le resultat ! \n\nIl est fortement déconseiller d'utiliser un câble avec une section plus élevée que celle conseillée, pour des raisons de sécuritée veuillez privilégier une valeur plus basse.",
+              ),
+            ],
           ),
-          NotificationListener<IntensityPowerNotification>(
-            child: Intensitypowerselector(),
-            onNotification: (notification) {
-              fillSection();
-              return true;
-            },
-          ),
-          NotificationListener<LengthNotification>(
-            child: Lengthselector(),
-            onNotification: (notification) {
-              fillSection();
-              return true;
-            },
-          ),
-          Text('Section : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            readOnly: true,
-            controller: sectionController,
-          ),
-        ],
+        ),
       ),
       //Debug
       floatingActionButton: FloatingActionButton(

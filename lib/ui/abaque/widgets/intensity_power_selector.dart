@@ -16,51 +16,107 @@ final powerController = TextEditingController();
 class _IntensitypowerselectorState extends State<Intensitypowerselector> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          flex: 1,
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Column(
-              children: [
-                Text('Intensitée :'),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: intensityController,
-                  decoration: InputDecoration(border: OutlineInputBorder()),
-                  onChanged: (value) {
-                    intensity = stringToNum(str: value);
-                    powerController.text = power.toString();
-                    IntensityPowerNotification().dispatch(context);
-                  },
+    var theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20,0,10,0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Intensitée :',
+                        style: TextStyle(color: theme.colorScheme.surface),
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: intensityController,
+                      style: TextStyle(color: theme.colorScheme.surface),
+                      cursorColor: theme.colorScheme.scrim,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        labelText: "Ampères (A)",
+                        labelStyle: TextStyle(
+                          color: const Color.fromARGB(111, 255, 255, 255),
+                          fontSize: 10,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        intensity = stringToNum(str: value);
+                        powerController.text = power.toString();
+                        IntensityPowerNotification().dispatch(context);
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        Flexible(
-          flex: 1,
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Column(
-              children: [
-                Text('Puissance :'),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: powerController,
-                  onChanged: (value) {
-                    power = stringToNum(str: value);
-                    intensityController.text = intensity.toString();
-                    IntensityPowerNotification().dispatch(context);
-                  },
+            Flexible(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10,0,20,0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        'Puissance :',
+                        style: TextStyle(color: theme.colorScheme.surface),
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: powerController,
+                      cursorColor: theme.colorScheme.scrim,
+                      style: TextStyle(color: theme.colorScheme.surface),
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        labelText: "Watt (W)",
+                        labelStyle: TextStyle(
+                          color: const Color.fromARGB(111, 255, 255, 255),
+                
+                          fontSize: 10,
+                        ),
+                        
+                      ),
+                      onChanged: (value) {
+                        power = stringToNum(str: value);
+                        intensityController.text = intensity.toString();
+                        IntensityPowerNotification().dispatch(context);
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
 
     // Table(

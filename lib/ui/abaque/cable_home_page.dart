@@ -1,6 +1,7 @@
 import 'package:abaque_app/ui/abaque/intensity_query_mono.dart';
 import 'package:abaque_app/ui/abaque/length_query_mono.dart';
 import 'package:abaque_app/ui/abaque/section_query_mono.dart';
+import 'package:abaque_app/ui/abaque/widgets/help_button.dart';
 import 'package:flutter/material.dart';
 
 class CableHomePage extends StatefulWidget {
@@ -67,47 +68,12 @@ class _CableHomePageState extends State<CableHomePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
                 child: BigCard(
-                  cardName: 'L\'intensité / la puissance ?',
+                  cardName: 'L\'intensité, puissance ?',
                   cardSubtitle: 'Ampères (A) / Watt (W)',
                   widgetToGo: IntensityQueryMono(),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                child: InkWell(
-                  child: Text(
-                    'Besoin d\'aide ?',
-                    style: TextStyle(decoration: TextDecoration.underline),
-                  ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            "Explication",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Une Abaque est un tableau grâce auquel on peut trouver les bonnes façons de poser des câbles, sans surchauffe de ces derniers par exemple.\n\nCette application fait la même chose, en plus simple ! On vous aide à trouver la longueur parfaite, la section idéale, ou l'intensitée maximum sur une installation. \n\nCliquez sur ce même bouton dans les pages pour voir avoir plus de détails !",
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
+              HelpButton(text: "Une Abaque est un tableau grâce auquel on peut trouver les bonnes façons de poser des câbles, sans surchauffe de ces derniers par exemple.\n\nCette application fait la même chose, en plus simple ! On vous aide à trouver la longueur parfaite, la section idéale, ou l'intensitée maximum sur une installation. \n\nCliquez sur ce même bouton dans les pages pour voir avoir plus de détails !")
             ],
           ),
         ),

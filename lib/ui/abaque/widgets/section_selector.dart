@@ -18,15 +18,18 @@ class _SectionselectorState extends State<Sectionselector> {
     return Card(
       color: theme.colorScheme.primary,
       child: Padding(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.fromLTRB(20,10,20,10),
         child: Table(
           children: [
             TableRow(
               children: [
                 Center(
-                  child: Text(
-                    'Section : ',
-                    style: TextStyle(color: theme.colorScheme.surface),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                    child: Text(
+                      'Section (À renseigner) : ',
+                      style: TextStyle(color: theme.colorScheme.surface),
+                    ),
                   ),
                 ),
               ],

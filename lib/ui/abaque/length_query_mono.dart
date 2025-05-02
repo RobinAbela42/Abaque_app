@@ -1,5 +1,6 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
 import 'package:abaque_app/ui/abaque/cable_home_page.dart';
+import 'package:abaque_app/ui/abaque/widgets/help_button.dart';
 import 'package:abaque_app/ui/abaque/widgets/intensity_power_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/section_selector.dart';
 import 'package:abaque_app/ui/abaque/widgets/voltage_selector.dart';
@@ -17,13 +18,22 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
 
   Section selectedSection = Section(0, 0);
 
-  bool isEverythingFilled() {
-    return (intensity != 0 && section != 0);
+  AssetImage currentEmoji = AssetImage("assets/emojis/thinking.png");
+
+  @override
+  initState() {
+    super.initState();
+    currentEmoji = AssetImage('assets/emojis/thinking.png');
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+
+    bool isEverythingFilled() {
+      return (intensity != 0 && section != 0 && voltage != 0);
+    }
+
     void fillLength() {
       if (checkOverloadedError()) {
         showDialog(
@@ -44,53 +54,100 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
           intensity: intensity,
         );
         lengthController.text = length.toString();
-      } else {
-        length = 0;
-        lengthController.text = '';
       }
     }
 
+    void emptyLength() {
+      length = 0;
+      lengthController.text = '';
+    }
+
     void emptyIntensityAndPower() {
-      debugPrint('EmptyIandP');
-      powerController.text = '';
       power = 0;
-      intensityController.text = '';
       intensity = 0;
+      powerController.text = '';
+      intensityController.text = '';
+    }
+
+    void updateImage() {
+      setState(() {
+        if (length != 0) {
+          currentEmoji = AssetImage("assets/emojis/smiling.png");
+        } else {
+          currentEmoji = AssetImage("assets/emojis/thinking.png");
+        }
+      });
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Longueur (M)')),
-      body: Column(
-        children: [
-          NotificationListener<VoltageNotification>(
-            child: Voltageselector(),
-            onNotification: (notification) {
-              emptyIntensityAndPower();
-              fillLength();
-              return true;
-            },
-          ),
-          NotificationListener<SectionNotification>(
-            child: Sectionselector(),
-            onNotification: (notification) {
-              fillLength();
-              return true;
-            },
-          ),
-          NotificationListener<IntensityPowerNotification>(
-            child: Intensitypowerselector(),
-            onNotification: (notification) {
-              fillLength();
-              return true;
-            },
-          ),
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.primary,
+        title: Text(
+          'Longueur (M)',
+          style: TextStyle(color: theme.colorScheme.surface),
+        ),
+      ),
+      backgroundColor: theme.colorScheme.primaryFixedDim,
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            NotificationListener<VoltageNotification>(
+              child: Voltageselector(),
+              onNotification: (notification) {
+                emptyIntensityAndPower();
+                emptyLength();
+                fillLength();
+                updateImage();
+                return true;
+              },
+            ),
+            NotificationListener<SectionNotification>(
+              child: Sectionselector(),
+              onNotification: (notification) {
+                emptyLength();
+                fillLength();
+                updateImage();
+                return true;
+              },
+            ),
+            NotificationListener<IntensityPowerNotification>(
+              child: Intensitypowerselector(),
+              onNotification: (notification) {
+                emptyLength();
+                fillLength();
+                updateImage();
+                return true;
+              },
+            ),
+            Wrap(
+              runAlignment: WrapAlignment.center,
+              alignment: WrapAlignment.center,
+              children: [
+                Text(
+                  'Résultat : ',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
 
-          Text('Length : '),
-          TextField(
-            keyboardType: TextInputType.number,
-            controller: lengthController,
-          ),
-        ],
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Image(image: currentEmoji),
+                ),
+              ],
+            ),
+            Text('Longueur : '),
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: lengthController,
+              readOnly: true,
+            ),
+            HelpButton(
+              text:
+                  "Cette page vous est utile pour calculer la longueur maximum pour un câble, correspondant à une certaine intensitée, une section et un voltage. \n\nRemplissez les 3 cases à renseigner avec les valeurs dont vous disposez, puis lisez le resultat ! \n\nIl est fortement déconseiller d'utiliser un câble avec une longueur plus élevée que celle conseillée, pour des raisons de sécuritée veuillez privilégier une valeur plus basse.",
+            ),
+          ],
+        ),
       ),
       //Debug
       floatingActionButton: FloatingActionButton(
