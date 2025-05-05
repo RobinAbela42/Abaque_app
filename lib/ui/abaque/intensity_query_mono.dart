@@ -40,9 +40,15 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
           voltage: voltage,
           length: length,
         );
-        intensityController.text = intensity.toString();
-        powerController.text = power.toString();
+        if (checkOverloadedLengthError()) {
+          Section sec = acceptableSections.firstWhere(
+            (s) => s.diameter == section,
+          );
+          intensity = sec.overloadedThreshold!;
+        }
       }
+      intensityController.text = intensity.toString();
+      powerController.text = power.toString();
     }
 
     void emptyIntensityAndPower() {
@@ -126,16 +132,20 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
                   ),
                   Text('Intensitée : '),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: intensityController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -146,16 +156,20 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
                   ),
                   Text('Puissance : '),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20,0,20,10),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: powerController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),

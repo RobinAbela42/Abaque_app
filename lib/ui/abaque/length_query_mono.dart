@@ -23,6 +23,8 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
   @override
   initState() {
     super.initState();
+    intensity=0;
+    
     currentEmoji = AssetImage('assets/emojis/thinking.png');
   }
 
@@ -32,29 +34,6 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
 
     bool isEverythingFilled() {
       return (intensity != 0 && section != 0 && voltage != 0);
-    }
-
-    void fillLength() {
-      if (checkOverloadedError()) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text(
-                'La section $section mm2 ne peut pas accepter plus de $intensity Ampères. \n\nChoisissez une section plus grande, ou diminuez l\'intensité.',
-              ),
-            );
-          },
-        );
-      }
-      if (isEverythingFilled()) {
-        length = computeLength(
-          section: section,
-          voltage: voltage,
-          intensity: intensity,
-        );
-        lengthController.text = length.toString();
-      }
     }
 
     void emptyLength() {
@@ -67,6 +46,30 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
       intensity = 0;
       powerController.text = '';
       intensityController.text = '';
+    }
+
+    void fillLength() {
+      if (isEverythingFilled()) {
+        length = computeLength(
+          section: section,
+          voltage: voltage,
+          intensity: intensity,
+        );
+        lengthController.text = length.toString();
+        if (checkOverloadedLengthError()) {
+          emptyLength();
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  'La section $section mm2 ne peut pas accepter plus de $intensity Ampères. \n\nChoisissez une section plus grande, ou diminuez l\'intensité.',
+                ),
+              );
+            },
+          );
+        }
+      }
     }
 
     void updateImage() {
@@ -134,7 +137,7 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-        
+
                       SizedBox(
                         width: 50,
                         height: 50,
@@ -144,14 +147,18 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
                   ),
                   Text('Longueur : '),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20,0,20,10),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                     child: TextField(
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),

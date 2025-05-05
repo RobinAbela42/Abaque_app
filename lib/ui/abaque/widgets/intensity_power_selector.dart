@@ -1,4 +1,5 @@
 import 'package:abaque_app/calculation/compute_abaque.dart';
+
 import 'package:flutter/material.dart';
 
 class Intensitypowerselector extends StatefulWidget {
@@ -10,10 +11,23 @@ class Intensitypowerselector extends StatefulWidget {
 
 class IntensityPowerNotification extends LayoutChangedNotification {}
 
-final intensityController = TextEditingController();
-final powerController = TextEditingController();
+final intensityController = TextEditingController(text: '');
+final powerController = TextEditingController(text: '');
 
 class _IntensitypowerselectorState extends State<Intensitypowerselector> {
+
+  @override
+  void initState() {
+    super.initState();
+    // If we need to recall the value of last input (through pages) :
+    //
+    // intensityController.text=intensity.toString();
+    // powerController.text=power.toString();
+    intensity = 0;
+    intensityController.text='';
+    powerController.text='';
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);

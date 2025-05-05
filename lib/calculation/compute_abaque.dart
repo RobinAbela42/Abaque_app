@@ -110,8 +110,6 @@ num get intensity {
   return (_intensity * 1000).round() / 1000;
 }
 
-
-
 set intensity(num value) {
   _intensity = value;
   _power = voltage * intensity;
@@ -129,7 +127,7 @@ set power(num value) {
   _intensity = power / voltage;
 }
 
-bool checkOverloadedError() {
+bool checkOverloadedLengthError() {
   Section currentSection = acceptableSections.firstWhere(
     (s) => s.diameter == section,
   );

@@ -40,8 +40,15 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
           voltage: voltage,
           intensity: intensity,
         );
-        sectionController.text = section.toString();
+        if (checkOverloadedLengthError()) {
+          while (checkOverloadedLengthError()) {
+            debugPrint('LoopError');
+            section = section + 1;
+          }
+          debugPrint("\n\n/section : $section//////////\n\n");
+        }
       }
+      sectionController.text = section.toString();
     }
 
     void emptyIntensityAndPower() {
@@ -131,16 +138,20 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
                   ),
                   Text('Section : '),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20,0,20,10),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                     child: TextField(
                       keyboardType: TextInputType.number,
                       readOnly: true,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: theme.colorScheme.scrim),
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.scrim,
+                          ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),

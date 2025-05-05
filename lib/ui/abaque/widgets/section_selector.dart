@@ -12,6 +12,13 @@ class Sectionselector extends StatefulWidget {
 class SectionNotification extends Notification {}
 
 class _SectionselectorState extends State<Sectionselector> {
+
+  @override
+  void initState() {
+    super.initState();
+    section = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
