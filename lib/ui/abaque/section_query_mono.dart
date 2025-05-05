@@ -45,7 +45,6 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
             debugPrint('LoopError');
             section = section + 1;
           }
-          debugPrint("\n\n/section : $section//////////\n\n");
         }
       }
       sectionController.text = section.toString();
