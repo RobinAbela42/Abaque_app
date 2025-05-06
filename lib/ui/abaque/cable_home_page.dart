@@ -47,7 +47,7 @@ class _CableHomePageState extends State<CableHomePage> {
               SizedBox(
                 width: 120,
                 height: 120,
-                child: Image(image: AssetImage("assets/emojis/thinking-2.png")),
+                child: Image(image: AssetImage("assets/emojis/thinking.png")),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
