@@ -127,7 +127,7 @@ set power(num value) {
   _intensity = power / voltage;
 }
 
-bool checkOverloadedLengthError() {
+bool checkOverloadedError() {
   Section currentSection = acceptableSections.firstWhere(
     (s) => s.diameter == section,
   );
@@ -139,30 +139,38 @@ bool checkOverloadedLengthError() {
   return false;
 }
 
-// num computeLength_1({section, intensity, voltage = 230, resistance = 0.021}) {
-//   return (voltage * section) / intensity * resistance;
-// }
-// num computeLength_2({section, intensity, voltage = 230, resistance = 0.021}) {
-//   return (voltage*voltageDrop * section) / (intensity * resistance *2);
-// }
-
 num computeLength({section, intensity, voltage = 230, resistance = 0.021}) {
-  return (((voltage * voltageDrop) * voltage * section) *
-      0.8 /
-      (power * resistance * 2));
+  if (checkOverloadedError()) {
+    throw RangeError(
+      "La section $section ne peut pas accepter plus de $intensity Ampères. \n\nChoisissez une section plus grande, ou diminuez l'intensité.",
+    );
+  } else {
+    return (((voltage * voltageDrop) * voltage * section) *
+        0.8 /
+        (power * resistance * 2));
+  }
 }
 
 num computeSection({length, intensity, voltage = 230, resistance = 0.021}) {
-  return (resistance * 2 * length * power) /
+  section =
+      (resistance * 2 * length * power) /
       ((voltage * voltageDrop) * voltage * 0.8);
-}
-
-num computeIntensity_1({section, length, voltage = 230, resistance = 0.021}) {
-  return (voltage * section) / length * resistance;
+  if (checkOverloadedError()) {
+    while (checkOverloadedError()) {
+      section = section + 1;
+    }
+  }
+  return section;
 }
 
 num computeIntensity({section, length, voltage = 230, resistance = 0.021}) {
-  return (section * (voltage * voltageDrop) * 0.8) / (2 * length * resistance);
+  intensity =
+      (section * (voltage * voltageDrop) * 0.8) / (2 * length * resistance);
+  if (checkOverloadedError()) {
+    Section sec = acceptableSections.firstWhere((s) => s.diameter == section);
+    intensity = sec.overloadedThreshold!;
+  }
+  return intensity;
 }
 
 num stringToNum({str}) {

@@ -23,8 +23,8 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
   @override
   initState() {
     super.initState();
-    intensity=0;
-    
+    intensity = 0;
+
     currentEmoji = AssetImage('assets/emojis/thinking.png');
   }
 
@@ -49,27 +49,26 @@ class _LengthQueryMonoState extends State<LengthQueryMono> {
     }
 
     void fillLength() {
-      if (isEverythingFilled()) {
-        length = computeLength(
-          section: section,
-          voltage: voltage,
-          intensity: intensity,
-        );
-        lengthController.text = length.toString();
-        if (checkOverloadedLengthError()) {
-          emptyLength();
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(
-                  'La section $section mm2 ne peut pas accepter plus de $intensity Ampères. \n\nChoisissez une section plus grande, ou diminuez l\'intensité.',
-                ),
-              );
-            },
+      try {
+        if (isEverythingFilled()) {
+          length = computeLength(
+            section: section,
+            voltage: voltage,
+            intensity: intensity,
           );
+          lengthController.text = length.toString();
         }
+      } on RangeError catch (error) {
+        emptyLength();
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(title: Text(error.message));
+          },
+        );
       }
+
+      if (checkOverloadedError()) {}
     }
 
     void updateImage() {

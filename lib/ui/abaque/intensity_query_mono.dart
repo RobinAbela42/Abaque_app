@@ -40,12 +40,6 @@ class _IntensityQueryMonoState extends State<IntensityQueryMono> {
           voltage: voltage,
           length: length,
         );
-        if (checkOverloadedLengthError()) {
-          Section sec = acceptableSections.firstWhere(
-            (s) => s.diameter == section,
-          );
-          intensity = sec.overloadedThreshold!;
-        }
       }
       intensityController.text = intensity.toString();
       powerController.text = power.toString();

@@ -40,12 +40,6 @@ class _SectionQueryMonoState extends State<SectionQueryMono> {
           voltage: voltage,
           intensity: intensity,
         );
-        if (checkOverloadedLengthError()) {
-          while (checkOverloadedLengthError()) {
-            debugPrint('LoopError');
-            section = section + 1;
-          }
-        }
       }
       sectionController.text = section.toString();
     }
