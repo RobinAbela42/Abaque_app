@@ -145,9 +145,12 @@ num computeLength({section, intensity, voltage = 230, resistance = 0.021}) {
       "La section $section ne peut pas accepter plus de $intensity Ampères. \n\nChoisissez une section plus grande, ou diminuez l'intensité.",
     );
   } else {
-    return (((voltage * voltageDrop) * voltage * section) *
-        0.8 /
-        (power * resistance * 2));
+    length =
+        (((voltage * voltageDrop) * voltage * section) *
+            0.8 /
+            (power * resistance * 2));
+
+    return length;
   }
 }
 
